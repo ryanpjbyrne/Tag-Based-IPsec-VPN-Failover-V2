@@ -11,8 +11,8 @@ Future improvements:
 """
 
 
-api_key = "0eb3bc01975ac5648cfb69d76f1c68fca2e1096b"
-org_id = "775803"
+api_key = ""
+org_id = ""
 url = "https://api.meraki.com/api/v0"  # base url
 networkDownList = []
 
