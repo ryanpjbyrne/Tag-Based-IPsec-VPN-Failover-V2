@@ -11,10 +11,79 @@ Future improvements:
 """
 
 
-api_key = ""
-org_id = ""
+api_key = "0eb3bc01975ac5648cfb69d76f1c68fca2e1096b"
+org_id = "775803"
 url = "https://api.meraki.com/api/v0"  # base url
 networkDownList = []
+v=
+v=[
+  {
+    "networkId": "N_123456789012345678",
+    "serial": "Q2**-****-****",
+    "uplink": "wan1",
+    "ip": "10.9.6.1",
+    "timeSeries": [
+      {
+        "ts": "2019-02-06T17:54:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:55:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:56:53Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:57:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:58:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      }
+    ]
+  },
+  {
+    "networkId": "N_987656789012345678",
+    "serial": "Q3**-****-****",
+    "uplink": "wan1",
+    "ip": "10.9.6.1",
+    "timeSeries": [
+      {
+        "ts": "2019-02-06T17:54:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:55:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:56:53Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:57:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      },
+      {
+        "ts": "2019-02-06T17:58:52Z",
+        "lossPercent": 0,
+        "latencyMs": 0.5
+      }
+    ]
+  }
+]
 
 
 def getUplinkLoss(api_key, org_id):
@@ -50,13 +119,14 @@ def getAllNetworks(api_key, org_id):
 def getNetwork(api_key, network):
     "Utility function to return single network information"
 
-    get_url = "networks/{0}/".format(network)
+    get_url = "{0}/networks/{1}/".format(url,network)
     headers = {
         "x-cisco-meraki-api-key": format(str(api_key)),
         "Content-Type": "application/json",
     }
     response = requests.get(get_url, headers=headers)
     response = json.loads(response.text)
+    print(response)
     return response
 
 
@@ -124,7 +194,7 @@ def network_tags(network):
             network_info = getNetwork(api_key, network["networkId"])
             print(network_info["name"])
             tags = network_info["tags"].split()
-            network = network_info["networkId"]
+            network = network_info["id"]
             sort_tags(tags, network)
             break
     return loss
@@ -146,6 +216,7 @@ def sortNetworkMain(org):  # first function to be called
 if __name__ == "__main__":
     while True:
         org = getUplinkLoss(api_key, org_id)
-        sortNetworkMain(org)
+        getNetwork(api_key,"N_681169443639811680")
+        sortNetworkMain(v)
         print("Sleeping for 5s...")
         time.sleep(30)
