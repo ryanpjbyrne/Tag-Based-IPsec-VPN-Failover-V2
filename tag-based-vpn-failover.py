@@ -15,75 +15,6 @@ api_key = "0eb3bc01975ac5648cfb69d76f1c68fca2e1096b"
 org_id = "775803"
 url = "https://api.meraki.com/api/v0"  # base url
 networkDownList = []
-v=
-v=[
-  {
-    "networkId": "N_123456789012345678",
-    "serial": "Q2**-****-****",
-    "uplink": "wan1",
-    "ip": "10.9.6.1",
-    "timeSeries": [
-      {
-        "ts": "2019-02-06T17:54:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:55:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:56:53Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:57:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:58:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      }
-    ]
-  },
-  {
-    "networkId": "N_987656789012345678",
-    "serial": "Q3**-****-****",
-    "uplink": "wan1",
-    "ip": "10.9.6.1",
-    "timeSeries": [
-      {
-        "ts": "2019-02-06T17:54:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:55:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:56:53Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:57:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      },
-      {
-        "ts": "2019-02-06T17:58:52Z",
-        "lossPercent": 0,
-        "latencyMs": 0.5
-      }
-    ]
-  }
-]
 
 
 def getUplinkLoss(api_key, org_id):
@@ -217,6 +148,6 @@ if __name__ == "__main__":
     while True:
         org = getUplinkLoss(api_key, org_id)
         getNetwork(api_key,"N_681169443639811680")
-        sortNetworkMain(v)
+        sortNetworkMain(org)
         print("Sleeping for 5s...")
         time.sleep(30)
