@@ -71,8 +71,8 @@ def updateNetwork(api_key, network, payload):
         "Content-Type": "application/json",
     }
     response = requests.put(get_url, headers=headers, data=json.dumps(payload))
-    # print(response.text)
-    # print(response.status_code)
+    print(response.text)
+    print(response.status_code)
     return response
 
 
@@ -92,7 +92,7 @@ def swapVPN(network, loss):
                 tags[i]=tag
 
         payload = {"tags": " ".join(tags)}
-        # print(payload)
+        print(payload)
         updateNetwork(api_key, network, payload)
         networkDownList.remove(network["networkId"])
         print(networkDownList)
