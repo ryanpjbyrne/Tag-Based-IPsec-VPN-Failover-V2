@@ -8,6 +8,7 @@ Future improvements:
 2) Error Handling - Cases where the API does not respond or is response is empty will fail the script - use of try/expect will fix this. 
 3) Logging - Useful if not running scripts manually 
 4) previousNetwork list 
+5) Refine API call for uplink and latency 
 """
 
 
@@ -147,7 +148,7 @@ def sortNetworkMain(org):  # first function to be called
 if __name__ == "__main__":
     while True:
         org = getUplinkLoss(api_key, org_id)
-        getNetwork(api_key,"N_681169443639811680")
+        #getNetwork(api_key,"N_681169443639811680")
         sortNetworkMain(org)
         print("Sleeping for 5s...")
         time.sleep(30)
