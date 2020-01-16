@@ -83,11 +83,13 @@ def swapVPN(network, loss):
         print("Primary VPN healthy again..swapping back")
         network_info = getNetwork(api_key, network["networkId"])
         tags = network_info["tags"].split()
-        for tag in tags:
+        for i,tag in enumerate(tags):
             if "_primary_down" in tag:
                 tag = tag.replace("_down", "_up")
+                tags[i]=tag
             elif "_backup_up" in tag:
                 tag = tag.replace("_up", "_down")
+                tags[i]=tag
 
         payload = {"tags": " ".join(tags)}
         # print(payload)
@@ -99,15 +101,17 @@ def swapVPN(network, loss):
 
 def sort_tags(tags, network):
     "Iterates through list of tags, updating the values without overiding"
-    for tag in tags:
+    for i,tag in enumerate(tags):
         if "_primary_down" in tag:
             print("VPN already swapped")
             break
         elif "_primary_up" in tag:
             tag = tag.replace("_up", "_down")
+            tags[i]=tag
             print("Changing VPN Recent Loss")
         elif "_backup_down" in tag:
             tag = tag.replace("_down", "_up")
+            tags[i]=tag
 
     payload = {"tags": " ".join(tags)}
     print(payload)
@@ -149,7 +153,6 @@ def sortNetworkMain(org):  # first function to be called
 if __name__ == "__main__":
     while True:
         org = getUplinkLoss(api_key, org_id)
-        #getNetwork(api_key,"N_681169443639811680")
         sortNetworkMain(org)
         print("Sleeping for 5s...")
         time.sleep(30)
