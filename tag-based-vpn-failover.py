@@ -104,7 +104,7 @@ def sort_tags(tags, network):
     for i,tag in enumerate(tags):
         if "_primary_down" in tag:
             print("VPN already swapped")
-            break
+            return
         elif "_primary_up" in tag:
             tag = tag.replace("_up", "_down")
             tags[i]=tag
