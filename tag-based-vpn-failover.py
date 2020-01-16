@@ -85,9 +85,9 @@ def swapVPN(network, loss):
         tags = network_info["tags"].split()
         for tag in tags:
             if "_primary_down" in tag:
-                tag = tags.replace("_down", "_up")
+                tag = tag.replace("_down", "_up")
             elif "_backup_up" in tag:
-                tag = tags.replace("_up", "_down")
+                tag = tag.replace("_up", "_down")
 
         payload = {"tags": " ".join(tags)}
         # print(payload)
@@ -104,10 +104,10 @@ def sort_tags(tags, network):
             print("VPN already swapped")
             break
         elif "_primary_up" in tag:
-            tag = tags.replace("_up", "_down")
+            tag = tag.replace("_up", "_down")
             print("Changing VPN Recent Loss")
         elif "_backup_down" in tag:
-            tag = tags.replace("_down", "_up")
+            tag = tag.replace("_down", "_up")
 
     payload = {"tags": " ".join(tags)}
     print(payload)
@@ -121,6 +121,7 @@ def network_tags(network):
     "Iterates through timeseries list to find cases where losspercent is >30"
 
     for i in network["timeSeries"]:
+        loss= False #fix 
         if i["lossPercent"] >= 30:  # consider using latency: or i['latencyMs'] >= 100
             loss = True
             network_info = getNetwork(api_key, network["networkId"])
