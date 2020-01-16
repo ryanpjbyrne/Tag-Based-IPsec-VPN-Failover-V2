@@ -120,7 +120,7 @@ def sort_tags(tags, network):
 def network_tags(network):
     "Iterates through timeseries list to find cases where losspercent is >30"
 
-    for i in network["timeseries"]:
+    for i in network["timeSeries"]:
         if i["lossPercent"] >= 30:  # consider using latency: or i['latencyMs'] >= 100
             loss = True
             network_info = getNetwork(api_key, network["networkId"])
