@@ -93,7 +93,7 @@ def swapVPN(network, loss):
 
         payload = {"tags": " ".join(tags)}
         print(payload)
-        updateNetwork(api_key, network, payload)
+        updateNetwork(api_key, network['networkId'], payload)
         networkDownList.remove(network["networkId"])
         print(networkDownList)
     return
