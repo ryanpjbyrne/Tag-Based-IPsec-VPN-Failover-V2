@@ -4,11 +4,7 @@ import time
 import logging
 """
 Future improvements:
-1) Consider using latency as a additional failing condition:  i.e 'or i['latencyMs'] >= 100'
-2) Error Handling - Cases where the API does not respond or is response is empty will fail the script - use of try/expect will fix this. 
-3) Logging - Useful if not running scripts manually 
-4) previousNetwork list 
-5) Refine API call for uplink and latency 
+1) Removal of while loop, to run as cronjob
 """
 
 
