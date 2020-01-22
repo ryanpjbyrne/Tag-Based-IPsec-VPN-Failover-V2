@@ -49,7 +49,7 @@ def getNetwork(api_key, network):
         logging.error('Error encountered when making API call: ' + str(e))
         exit(0)
 
-def import_json(filename):
+def importJson(filename):
     try:
         with open(filename, 'r') as jsonFile:
             jsonObj = json.load(jsonFile)
@@ -179,7 +179,7 @@ if __name__ == "__main__":
                         format='%(asctime)s %(levelname)s: %(message)s',
                         level=logging.INFO)
 
-    parameters=import_json('meraki_parameters.json') #Collects parameters from Json file
+    parameters=importJson('meraki_parameters.json') #Collects parameters from Json file
     api_key= parameters['meraki']['api_key']
     org_id= parameters['meraki']['org_id']
 
