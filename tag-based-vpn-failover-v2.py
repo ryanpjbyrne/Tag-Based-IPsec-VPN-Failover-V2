@@ -46,7 +46,7 @@ def getNetwork(api_key, network):
         logging.error("Error encountered when making API call: " + str(e))
         exit(0)
 
-def send_snmp(severity,notification,description):
+def send_snmp(severity,notification,description): #Not in use currently
     "Utility function to send SNMP Inform messages"
     try:
         deviceName = parameters['cdm_info']['device_name']
@@ -81,17 +81,30 @@ def send_snmp(severity,notification,description):
         exit(0)
 
 
-def importJson(filename):
-    "Imports json parameter file"
+def importYaml(filename):
+    "Imports yaml parameter file"
     try:
-        with open(filename, 'r') as jsonFile:
-            jsonObj = json.load(jsonFile)
-        return jsonObj
+        with open(filename, 'r') as ymlFile:
+            ymlObj = yaml.load(ymlFile)
+        return yamlObj
     except Exception as e:
         logging.error("Error encountered when loading JSON configuration file: "+ str(e))
         exit(0)
 
+def updateNetwork(api_key, network, payload):
+    "Utility function to update network configuration"
 
+    try:
+        get_url = "{0}/networks/{1}".format(url, network)
+        headers = {
+            "x-cisco-meraki-api-key": format(str(api_key)),
+            "Content-Type": "application/json",
+        }
+        response = requests.put(get_url, headers=headers, data=json.dumps(payload))
+        return response
+    except Exception as e: 
+        logging.error("Error encountered when making API call: " + str(e))
+        exit(0)
 
 def readPickle(path,default): 
     "Function attempts to open an existing file with list. Otherwise will return an empty list."
@@ -110,24 +123,6 @@ def writePickle(path,default):
         pickle.dump(default,open(path,"wb")) 
     except(OSError,IOError) as e :
         logging.error("Could not write list to file: " + str(e))
-
-
-def updateNetwork(api_key, network, payload):
-    "Utility function to update network configuration"
-
-    try:
-        get_url = "{0}/networks/{1}".format(url, network)
-        headers = {
-            "x-cisco-meraki-api-key": format(str(api_key)),
-            "Content-Type": "application/json",
-        }
-        response = requests.put(get_url, headers=headers, data=json.dumps(payload))
-        return response
-    except Exception as e: 
-        logging.error("Error encountered when making API call: " + str(e))
-        exit(0)
-
-
 
 
 def swapVPN(network, loss):
@@ -206,13 +201,13 @@ if __name__ == "__main__":
                         format='%(asctime)s %(levelname)s: %(message)s',
                         level=logging.INFO)
 
-    parameters=importJson('meraki_parameters.json') #Collects parameters from Json file
+    parameters=importYaml('meraki_parameters.json') #Collects parameters from Json file
     api_key= parameters['meraki']['api_key']
     org_id= parameters['meraki']['org_id']
 
     #Reads serialized file for latest version of networkDownList
     networkDownList=readPickle(path,networkDownList) 
-    #Retrieves uplink loss & latencty information for organization
+    #Retrieves uplink loss & latencty information for organization + can be used for heartbeat
     org = getUplinkLoss(api_key, org_id)
     #Iterates through networks to determine if VPN needs to be swapped
     sortNetworkMain(org)
