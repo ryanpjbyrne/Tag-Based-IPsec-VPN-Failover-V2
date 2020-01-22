@@ -1,1 +1,0 @@
-Centos 8 - Python3 & Pip3 by default
