@@ -16,7 +16,8 @@ Once the tracked IP has not had any loss in the last 5 minutes, the tags will be
 
 
 
-Network Tags
+### Network Tags
+
 Navigate to Organization > Overview on the Meraki Dashboard.  Select the network you wish to tag and add one tag for each IPSEC peer.  Tags should be in the format:
 
 <identifier>_<primary/backup>_<state(up/down)>
@@ -25,9 +26,9 @@ Navigate to Organization > Overview on the Meraki Dashboard.  Select the network
 
 As an example, if my primary VPN endpoint is London and backup is Paris my tags would be:
 
-london_primary_up (default state for primary is up)
+**london_primary_up** (default state for primary is up)
 
-paris_backup_down (default state for the backup is down)
+**paris_backup_down** (default state for the backup is down)
 
  
 
