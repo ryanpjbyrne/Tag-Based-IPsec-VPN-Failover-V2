@@ -18,7 +18,6 @@ networkDownList = []
 def getUplinkLoss(api_key, org_id):
     "Utility function to return the uplink loss and latency for every MX in the org"
     try:
-        print(api_key)
         get_url = "{0}/organizations/{1}/uplinksLossAndLatency?uplink=wan1".format(
             url, org_id
         )
@@ -27,7 +26,6 @@ def getUplinkLoss(api_key, org_id):
             "Content-Type": "application/json",
         }
         response = requests.get(get_url, headers=headers)
-        print(response)
         response = json.loads(response.text)
         return response
     except Exception as e:
@@ -234,8 +232,7 @@ if __name__ == "__main__":
     )  # Collects parameters from Json file
     api_key = parameters["meraki"]["api_key"]
     org_id = parameters["meraki"]["org_id"]
-    print(api_key)
-    print(org_id)
+
 
     # Reads serialized file for latest version of networkDownList
     networkDownList = readPickle(path, networkDownList)
