@@ -1,8 +1,0 @@
-meraki:
-  api_key: 211f78c7ab2c50b22255aa9cab4ff218f579fdfc
-  org_id: 925340
-cdm_info:
-  cdm_ip: demo.blah
-  device_name: test
-  community_key: public 
-  class: test

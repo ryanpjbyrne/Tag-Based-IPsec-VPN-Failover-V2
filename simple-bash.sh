@@ -20,4 +20,4 @@ git clone https://gitlab-deploy-token-meraki:UhCraKb2L2qpyxX-y_yV@scm.dimensiond
 #rm mycon 
 
 #Reads requirements.txt file and downloads packages
-pip3 install -r requirements.txt 
+pip install -r requirements.txt 
