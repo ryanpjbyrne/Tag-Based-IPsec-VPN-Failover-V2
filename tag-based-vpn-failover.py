@@ -4,6 +4,7 @@ import time
 import logging
 import pickle
 import os
+from pysnmp.hlapi import *
 
 global parameters
 

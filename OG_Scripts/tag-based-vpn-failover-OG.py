@@ -104,7 +104,6 @@ def swapVPN(network, loss):
     if loss is False and network["networkId"] in networkDownList:
         print("Primary VPN healthy again..swapping back")
         network_info = getNetwork(api_key, network["networkId"])
-        network_name = network_info["name"]
         tags = network_info["tags"].split()
         for i, tag in enumerate(tags):
             if "_primary_down" in tag:
@@ -206,4 +205,4 @@ if __name__ == "__main__":
     # Iterates through networks to determine if VPN needs to be swapped
     sortNetworkMain(org)
     # Writes to serialized file with latest version of networkDownList
-    networkDownList = writePickle(path, networkDownList)
+    writePickle(path, networkDownList)
