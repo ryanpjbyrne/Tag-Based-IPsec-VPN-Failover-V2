@@ -42,6 +42,12 @@ Following changes:
 *  Cron compatible
 *  SNMP monitoring 
 
+#### To run: 
+
+Configure `meraki-parameters.json` with credentials then run:
+
+`python tag-based-vpn-failover.py`
+
  
 
 
