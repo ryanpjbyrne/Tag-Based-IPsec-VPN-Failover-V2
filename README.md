@@ -31,7 +31,7 @@ As an example, if my primary VPN endpoint is London and backup is Paris my tags 
 **paris_backup_down** (default state for the backup is down)
 
 
-## Developer Notes
+### Developer Notes
 
 This script is based of an vendor script : https://documentation.meraki.com/MX/Site-to-site_VPN/Tag-Based_IPsec_VPN_Failover
 
