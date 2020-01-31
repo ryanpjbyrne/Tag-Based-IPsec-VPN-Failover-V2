@@ -14,11 +14,11 @@ path = "NetworkDownList.pickle"  # Name of serialzed list file
 url = "https://api.meraki.com/api/v0"  # base url
 excludedIPs = ["8.8.8.8", "8.8.4.4", "212.58.237.254"]
 networkDownList = []
-network_list=["N_something_something","N"] 
+network_list=["N_something_something","N"]
 
 
-def getUplinkLoss(api_key, org_id):
-    "Utility function to return the uplink loss and latency for every MX in the org"
+def getUplinkStats(api_key, org_id):
+    "Utility function to return the uplink loss and latency for WAN1 on every MX in the org"
     try:
         get_url = "{0}/organizations/{1}/uplinksLossAndLatency?uplink=wan1".format(
             url, org_id
@@ -51,7 +51,7 @@ def getNetwork(api_key, network):
         exit(0)
 
 
-def send_snmp(severity, notification, description):  # Not in use currently
+def sendSNMPTrap(severity, notification, description):  # Not in use currently
     "Utility function to send SNMP Inform messages"
     try:
         deviceName = parameters["cdm_info"]["device_name"]
@@ -105,7 +105,7 @@ def importJson(filename):
         exit(0)
 
 
-def updateNetwork(api_key, network, payload):
+def updateNetworkTags(api_key, network, payload):
     "Utility function to update network configuration"
 
     try:
@@ -141,7 +141,7 @@ def writePickle(path, default):
         logging.error("Could not write list to file: " + str(e))
 
 
-def swapVPN(network, loss):
+def VPNFailback(network, loss):
     "Swaps tags when the primary VPN is healthy"
 
     if loss is False and network["networkId"] in networkDownList:
@@ -149,15 +149,15 @@ def swapVPN(network, loss):
         network_info = getNetwork(api_key, network["networkId"])
         tags = network_info["tags"].split()
         for i, tag in enumerate(tags):
-            if "_primary_down" in tag:
-                tag = tag.replace("_down", "_up")
+            if "_ZS_P_DOWN" in tag:
+                tag = tag.replace("_DOWN", "_UP")
                 tags[i] = tag
-            elif "_backup_up" in tag:
-                tag = tag.replace("_up", "_down")
+            elif "_ZS_B_UP" in tag:
+                tag = tag.replace("_UP", "_DOWN")
                 tags[i] = tag
 
         payload = {"tags": " ".join(tags)}
-        updateNetwork(api_key, network["networkId"], payload)
+        updateNetworkTags(api_key, network["networkId"], payload)
         networkDownList.remove(network["networkId"])
         logging.info(
             "FAILBACK - VPN healthy again: {0} IP:{1}.".format(
@@ -167,22 +167,22 @@ def swapVPN(network, loss):
     return
 
 
-def sortTags(tags, network, network_name, timeseries):
+def VPNFailover(tags, network, network_name, timeseries):
     "Iterates through list of tags, updating the values without overiding"
     for i, tag in enumerate(tags):
-        if "_primary_down" in tag:
+        if "_ZS_P_DOWN" in tag:
             # print("VPN already swapped")
             return
-        elif "_primary_up" in tag:
-            tag = tag.replace("_up", "_down")
+        elif "_ZS_P_UP" in tag:
+            tag = tag.replace("_UP", "_DOWN")
             tags[i] = tag
             # print("Changing VPN Recent Loss")
-        elif "_backup_down" in tag:
-            tag = tag.replace("_down", "_up")
+        elif "_ZS_B_DOWN" in tag:
+            tag = tag.replace("_DOWN", "_UP")
             tags[i] = tag
 
     payload = {"tags": " ".join(tags)}
-    updateNetwork(api_key, network["networkId"], payload)
+    updateNetworkTags(api_key, network["networkId"], payload)
     networkDownList.append(network["networkId"])
     logging.info(
         "FAILOVER - {0} IP:{1} Loss: {2} Latency{3}.".format(
@@ -195,7 +195,7 @@ def sortTags(tags, network, network_name, timeseries):
     return
 
 
-def networkTags(network, loss):
+def networkHealthCheck(network, loss):
     "Iterates through timeseries list to find cases where losspercent is >=30% or latency is >=100ms"
 
     for i in network["timeSeries"]:
@@ -204,19 +204,19 @@ def networkTags(network, loss):
             network_info = getNetwork(api_key, network["networkId"])
             network_name = network_info["name"]
             tags = network_info["tags"].split()
-            sortTags(tags, network, network_name, i)
+            VPNFailover(tags, network, network_name, i)
             break
     return loss
 
 
-def sortNetworkMain(org):  # first function to be called
+def MasterFunction(org):  # first function to be called
     "Iterates through list of networks in the organization (main function)"
 
     for network in org:
         if network["ip"] not in excludedIPs and network["networkId"] in network_list:
             loss = False
-            loss = networkTags(network, loss)
-            swapVPN(network, loss)
+            loss = networkHealthCheck(network, loss)
+            VPNFailback(network, loss)
     return
 
 
@@ -224,7 +224,7 @@ if __name__ == "__main__":
 
     # Defines Log File
     logging.basicConfig(
-        filename="meraki_vpn_health.log",
+        filename="meraki_zscaler_vpn_health.log",
         format="%(asctime)s %(levelname)s: %(message)s",
         level=logging.INFO,
     )
@@ -239,8 +239,8 @@ if __name__ == "__main__":
     # Reads serialized file for latest version of networkDownList
     networkDownList = readPickle(path, networkDownList)
     # Retrieves uplink loss & latencty information for organization + can be used for heartbeat
-    org = getUplinkLoss(api_key, org_id)
+    org = getUplinkStats(api_key, org_id)
     # Iterates through networks to determine if VPN needs to be swapped
-    sortNetworkMain(org)
+    MasterFunction(org)
     # Writes to serialized file with latest version of networkDownList
     writePickle(path, networkDownList)
