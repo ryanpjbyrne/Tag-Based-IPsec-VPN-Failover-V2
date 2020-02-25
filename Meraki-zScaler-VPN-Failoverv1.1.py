@@ -29,7 +29,14 @@ def getUplinkStats(api_key, org_id):
         }
         response = requests.get(get_url, headers=headers)
         response = json.loads(response.text)
-        return response
+
+        if response.status_code==200:
+            sendSNMPTrap(4,'Heartbeat','Remote system is connected with Meraki')
+            return response
+        
+        else:
+            logging.error('Error encountered when making API call:'+str(response.status_code))
+            exit(0)
     except Exception as e:
         logging.error("Error encountered when making API call: " + str(e))
         exit(0)
@@ -209,7 +216,7 @@ def networkHealthCheck(network, loss):
     return loss
 
 
-def MasterFunction(org):  # first function to be called
+def sortNetworkMain(org):  # first function to be called
     "Iterates through list of networks in the organization (main function)"
 
     for network in org:
@@ -241,6 +248,6 @@ if __name__ == "__main__":
     # Retrieves uplink loss & latencty information for organization + can be used for heartbeat
     org = getUplinkStats(api_key, org_id)
     # Iterates through networks to determine if VPN needs to be swapped
-    MasterFunction(org)
+    sortNetworkMain(org)
     # Writes to serialized file with latest version of networkDownList
     writePickle(path, networkDownList)
