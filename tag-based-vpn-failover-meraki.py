@@ -32,7 +32,7 @@ def getUplinkStats(api_key, org_id):
         response = json.loads(response.text)
 
         if response.status_code == 200:
-            sendSNMPTrap(4, "Heartbeat", "Remote system is connected with Meraki")
+            sendSNMPTrap(4, "Heartbeat", "Remote system is connected with Meraki") #Sends heartbeat trap to RIM platform
             return response
 
         else:
