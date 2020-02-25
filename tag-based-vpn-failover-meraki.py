@@ -5,6 +5,7 @@ import logging
 import pickle
 import os
 from pysnmp.hlapi import *
+from logging.handlers import TimedRotatingFileHandler
 
 global parameters
 
@@ -232,11 +233,17 @@ def sortNetworkMain(org):  # first function to be called
 if __name__ == "__main__":
 
     # Defines Log File
-    logging.basicConfig(
-        filename="meraki_zscaler_vpn_health.log",
-        format="%(asctime)s %(levelname)s: %(message)s",
-        level=logging.INFO,
-    )
+    logger= logging.getLogger()
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    logHandler = TimedRotatingFileHandler('meraki_zscaler_vpn_health.log', when='D', interval=30, backupCount=6)
+    logHandler.setLevel(logging.INFO)
+    logHandler.setFormatter(formatter)
+    logger.addHandler(logHandler)
+
+
+
 
     parameters = importJson(
         "meraki_parameters.json"
