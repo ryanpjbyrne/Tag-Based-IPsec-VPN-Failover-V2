@@ -17,7 +17,7 @@ git clone https://gitlab-deploy-token-meraki:UhCraKb2L2qpyxX-y_yV@scm.dimensiond
 #insert new cron jobs 
 #echo "* * * * * echo hello >> mycron 
 #crontab mycron 
-#rm mycon 
+#rm mycron 
 
 #Reads requirements.txt file and downloads packages
-pip3 install -r requirements.txt 
+pip install -r requirements.txt 
