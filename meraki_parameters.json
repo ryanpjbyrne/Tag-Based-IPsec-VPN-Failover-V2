@@ -4,9 +4,9 @@
         "org_id": "925340"
     },
     "cdm_info": {
-        "cdm_ip": "demo.snmplabs.com",
-        "device_name": "SocialMiner test version",
+        "cdm_ip": "10.10.129.6",
+        "device_name": "deallpumgt001",
         "community_key": "public",
-        "class": "test"
+        "class": "Script_Heartbeat"
     }
 }
