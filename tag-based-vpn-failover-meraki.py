@@ -106,7 +106,6 @@ def importJson(filename):
     try:
         with open(filename, "r") as jsonFile:
             jsonObj = json.load(jsonFile)
-        # logging.info('Successfully imported the configuration file: ' + str(filename))
         return jsonObj
     except Exception as e:
         logging.error(
@@ -181,12 +180,10 @@ def VPNFailover(tags, network, network_name, timeseries):
     "Iterates through list of tags, updating the values without overiding"
     for i, tag in enumerate(tags):
         if "_ZS_P_DOWN" in tag:
-            # print("VPN already swapped")
             return
         elif "_ZS_P_UP" in tag:
             tag = tag.replace("_UP", "_DOWN")
             tags[i] = tag
-            # print("Changing VPN Recent Loss")
         elif "_ZS_B_DOWN" in tag:
             tag = tag.replace("_DOWN", "_UP")
             tags[i] = tag
@@ -233,21 +230,22 @@ def sortNetworkMain(org):  # first function to be called
 if __name__ == "__main__":
 
     # Defines Log File
-    logger= logging.getLogger()
+    logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
 
-    logHandler = TimedRotatingFileHandler('meraki_zscaler_vpn_health.log', when='D', interval=30, backupCount=6)
+    logHandler = TimedRotatingFileHandler(
+        "meraki_zscaler_vpn_health.log", when="D", interval=30, backupCount=6
+    )
     logHandler.setLevel(logging.INFO)
     logHandler.setFormatter(formatter)
     logger.addHandler(logHandler)
-
-
-
-
+    # Collects parameters from Json file
     parameters = importJson(
         "meraki_parameters.json"
-    )  # Collects parameters from Json file
+    )  
     api_key = parameters["meraki"]["api_key"]
     org_id = parameters["meraki"]["org_id"]
 
