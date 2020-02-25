@@ -14,7 +14,7 @@ path = "NetworkDownList.pickle"  # Name of serialzed list file
 url = "https://api.meraki.com/api/v0"  # base url
 excludedIPs = ["8.8.8.8", "8.8.4.4", "212.58.237.254"]
 networkDownList = []
-network_list=["N_something_something","N"]
+network_list = ["N_something_something", "N"]
 
 
 def getUplinkStats(api_key, org_id):
@@ -30,12 +30,14 @@ def getUplinkStats(api_key, org_id):
         response = requests.get(get_url, headers=headers)
         response = json.loads(response.text)
 
-        if response.status_code==200:
-            sendSNMPTrap(4,'Heartbeat','Remote system is connected with Meraki')
+        if response.status_code == 200:
+            sendSNMPTrap(4, "Heartbeat", "Remote system is connected with Meraki")
             return response
-        
+
         else:
-            logging.error('Error encountered when making API call:'+str(response.status_code))
+            logging.error(
+                "Error encountered when making API call:" + str(response.status_code)
+            )
             exit(0)
     except Exception as e:
         logging.error("Error encountered when making API call: " + str(e))
@@ -241,7 +243,6 @@ if __name__ == "__main__":
     )  # Collects parameters from Json file
     api_key = parameters["meraki"]["api_key"]
     org_id = parameters["meraki"]["org_id"]
-
 
     # Reads serialized file for latest version of networkDownList
     networkDownList = readPickle(path, networkDownList)
