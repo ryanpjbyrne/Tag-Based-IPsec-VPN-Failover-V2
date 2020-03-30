@@ -61,7 +61,7 @@ def getNetwork(api_key, network):
         exit(0)
 
 
-def sendSNMPTrap(severity, notification, description):  # Not in use currently
+def sendSNMPTrap(severity, notification, description): 
     "Utility function to send SNMP Inform messages"
     try:
         deviceName = parameters["cdm_info"]["device_name"]
@@ -96,6 +96,7 @@ def sendSNMPTrap(severity, notification, description):  # Not in use currently
                     errorIndex and varBinds[int(errorIndex) - 1][0] or "?",
                 )
             )
+        return
     except Exception as e:
         logging.error("Could not send SNMP inform message: " + str(e))
         exit(0)
