@@ -1,5 +1,19 @@
 Tag-Based IPsec VPN Failover V2
 ============= 
+### Developer Notes
+
+This script is based of meraki provided script : https://documentation.meraki.com/MX/Site-to-site_VPN/Tag-Based_IPsec_VPN_Failover
+
+Thanks to Guillaume6hat for pointing out some important issues with the original script.
+
+Following changes: 
+
+*  Refactored - Removal of infinite loop, refactored into functions.
+*  Fix of tagging functionality - old version was overwriting tags & breaking.
+*  Logging  
+*  Cron compatible
+
+These changes enable the script to be easily modified & add additional functionality such as alerting.
 
 ## Overview
 Tagged Based VPN Failover is utilized for third party Data Center Failover and OTT SD WAN Integration. This is accomplished by utilizing the API at each branch or Data Center. Each MX appliance will utilize IPsec VPN with cloud VPN nodes. IPsec along with the API is utilized to facilitate the dynamic tag allocation.
@@ -31,16 +45,6 @@ As an example, if my primary VPN endpoint is London and backup is Paris my tags 
 **paris_backup_down** (default state for the backup is down)
 
 
-### Developer Notes
-
-This script is based of an vendor script : https://documentation.meraki.com/MX/Site-to-site_VPN/Tag-Based_IPsec_VPN_Failover
-
-Following changes: 
-
-*  Refactored - Removal of infinite loop, refactored into functions.
-*  Fix of tagging functionality - old version was overwriting tags.
-*  Logging  
-*  Cron compatible
 
 #### To run: 
 
