@@ -4,7 +4,6 @@ import time
 import logging
 import pickle
 import os
-from pysnmp.hlapi import *
 from logging.handlers import TimedRotatingFileHandler
 
 global parameters
@@ -13,9 +12,8 @@ api_key = ""
 org_id = ""
 path = "NetworkDownList.pickle"  # Name of serialzed list file
 url = "https://api.meraki.com/api/v0"  # base url
-excludedIPs = ["8.8.8.8", "8.8.4.4", "212.58.237.254"]
+excludedIPs = ["8.8.8.8", "8.8.4.4"]
 networkDownList = []
-network_list = ["N_something_something", "N"]
 
 
 def getUplinkStats(api_key, org_id):
@@ -32,7 +30,6 @@ def getUplinkStats(api_key, org_id):
         response_json = json.loads(response.text)
 
         if response.status_code == 200:
-            sendSNMPTrap(4, "Heartbeat", "Remote system is connected with Meraki") #Sends heartbeat trap to RIM platform
             return response_json
 
         else:
@@ -58,47 +55,6 @@ def getNetwork(api_key, network):
         return response
     except Exception as e:
         logging.error("Error encountered when making API call: " + str(e))
-        exit(0)
-
-
-def sendSNMPTrap(severity, notification, description): 
-    "Utility function to send SNMP Inform messages"
-    try:
-        deviceName = parameters["cdm_info"]["device_name"]
-        cdmIP = parameters["cdm_info"]["cdm_ip"]
-        classType = parameters["cdm_info"]["class"]
-        communityKey = parameters["cdm_info"]["community_key"]
-        errorIndication, errorStatus, errorIndex, varBinds = next(
-            sendNotification(
-                SnmpEngine(),
-                CommunityData(communityKey, mpModel=1),
-                UdpTransportTarget((cdmIP, 162)),
-                ContextData(),
-                "inform",
-                NotificationType(
-                    ObjectIdentity(".1.3.6.1.4.1.10714.1.1.1")
-                ).addVarBinds(
-                    (".1.3.6.1.4.1.10714.1.2.1", OctetString(deviceName)),
-                    (".1.3.6.1.4.1.10714.1.2.2", Integer(severity)),
-                    (".1.3.6.1.4.1.10714.1.2.3", OctetString(notification)),
-                    (".1.3.6.1.4.1.10714.1.2.4", OctetString(description)),
-                    (".1.3.6.1.4.1.10714.1.2.5", OctetString(classType)),
-                ),
-            )
-        )
-        if errorIndication:
-            logging.error(errorIndication)
-        elif errorStatus:
-            logging.error(
-                "%s at %s"
-                % (
-                    errorStatus.prettyPrint(),
-                    errorIndex and varBinds[int(errorIndex) - 1][0] or "?",
-                )
-            )
-        return
-    except Exception as e:
-        logging.error("Could not send SNMP inform message: " + str(e))
         exit(0)
 
 
@@ -221,7 +177,7 @@ def sortNetworkMain(org):  # first function to be called
     "Iterates through list of networks in the organization (main function)"
 
     for network in org:
-        if network["ip"] not in excludedIPs and network["networkId"] in network_list:
+        if network["ip"] not in excludedIPs:
             loss = False
             loss = networkHealthCheck(network, loss)
             VPNFailback(network, loss)
@@ -243,16 +199,15 @@ if __name__ == "__main__":
     logHandler.setLevel(logging.INFO)
     logHandler.setFormatter(formatter)
     logger.addHandler(logHandler)
+
     # Collects parameters from Json file
-    parameters = importJson(
-        "meraki_parameters.json"
-    )  
+    parameters = importJson("meraki_parameters.json")
     api_key = parameters["meraki"]["api_key"]
     org_id = parameters["meraki"]["org_id"]
 
     # Reads serialized file for latest version of networkDownList
     networkDownList = readPickle(path, networkDownList)
-    # Retrieves uplink loss & latencty information for organization + can be used for heartbeat
+    # Retrieves uplink loss & latency information for organization
     org = getUplinkStats(api_key, org_id)
     # Iterates through networks to determine if VPN needs to be swapped
     sortNetworkMain(org)

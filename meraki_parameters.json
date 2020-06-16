@@ -1,12 +1,6 @@
 {
     "meraki": {
-        "api_key": "211f78c7ab2c50b22255aa9cab4ff218f579fdfc",
-        "org_id": "925340"
-    },
-    "cdm_info": {
-        "cdm_ip": "10.10.129.6",
-        "device_name": "deallpumgt001",
-        "community_key": "public",
-        "class": "Script_Heartbeat"
+        "api_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "org_id": "12345"
     }
 }

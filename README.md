@@ -40,7 +40,6 @@ Following changes:
 *  Refactored - Removal of infinite loop, functions etc
 *  Fix of tagging functionality 
 *  Cron compatible
-*  SNMP monitoring 
 
 #### To run: 
 
