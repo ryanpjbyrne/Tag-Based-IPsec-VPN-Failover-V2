@@ -1,4 +1,4 @@
-Tag-Based IPsec VPN Failover
+Tag-Based IPsec VPN Failover V2
 ============= 
 
 ## Overview
@@ -37,8 +37,9 @@ This script is based of an vendor script : https://documentation.meraki.com/MX/S
 
 Following changes: 
 
-*  Refactored - Removal of infinite loop, functions etc
-*  Fix of tagging functionality 
+*  Refactored - Removal of infinite loop, refactored into functions.
+*  Fix of tagging functionality - old version was overwriting tags.
+*  Logging  
 *  Cron compatible
 
 #### To run: 
