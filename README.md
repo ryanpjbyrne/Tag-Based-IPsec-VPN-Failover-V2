@@ -4,7 +4,7 @@ Tag-Based IPsec VPN Failover V2
 
 This script is based of meraki provided script : https://documentation.meraki.com/MX/Site-to-site_VPN/Tag-Based_IPsec_VPN_Failover
 
-Thanks to Guillaume6hat for pointing out some important issues with the original script.
+Also, thanks to Guillaume6hat for pointing out some important issues & fixes for the original script which are implemented here.
 
 Following changes: 
 
