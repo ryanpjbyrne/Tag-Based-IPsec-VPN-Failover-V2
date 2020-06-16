@@ -8,11 +8,11 @@ from logging.handlers import TimedRotatingFileHandler
 
 global parameters
 
-api_key = ""
-org_id = ""
+api_key = "" #Can be defined here or in the json file.
+org_id = "" #Can be defined here or in the json file.
 path = "NetworkDownList.pickle"  # Name of serialzed list file
 url = "https://api.meraki.com/api/v0"  # base url
-excludedIPs = ["8.8.8.8", "8.8.4.4"]
+excludedIPs = ["8.8.8.8"] # Specify a list of excluded IPs
 networkDownList = []
 
 
